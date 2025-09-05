@@ -38,8 +38,9 @@ class TestTimeService:
     def test_get_current_time_in_city_invalid(self):
         """اختبار الحصول على الوقت لمدينة غير موجودة"""
         with pytest.raises(CityNotFoundException):
-            self.time_service.get_current_time_in_city("مدينة_خيالية")    def
- test_calculate_time_difference_valid_cities(self):
+            self.time_service.get_current_time_in_city("مدينة_خيالية")
+    
+    def test_calculate_time_difference_valid_cities(self):
         """اختبار حساب فرق التوقيت بين مدينتين صحيحتين"""
         comparison = self.time_service.calculate_time_difference("cairo", "london")
         

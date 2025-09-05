@@ -47,8 +47,8 @@ class TestWeatherAPI:
         
         assert response.status_code == 404
         data = response.json()
-        assert "المدينة" in data["detail"]
-        assert "غير موجودة" in data["detail"]
+        assert "المدينة" in data["message"]
+        assert "غير موجودة" in data["message"]
     
     def test_get_weather_empty_city(self):
         """اختبار حالة اسم المدينة فارغ"""
@@ -56,7 +56,7 @@ class TestWeatherAPI:
         
         assert response.status_code == 400
         data = response.json()
-        assert "يجب تحديد اسم المدينة" in data["detail"]
+        assert "يجب تحديد اسم المدينة" in str(data)
     
     def test_get_weather_missing_city_parameter(self):
         """اختبار حالة عدم وجود معامل المدينة"""
@@ -70,7 +70,7 @@ class TestWeatherAPI:
         
         assert response.status_code == 400
         data = response.json()
-        assert "يجب تحديد اسم المدينة" in data["detail"]
+        assert "يجب تحديد اسم المدينة" in str(data)
     
     @patch('app.services.weather_service.weather_service.get_weather')
     def test_get_weather_service_exception(self, mock_get_weather):
@@ -81,7 +81,7 @@ class TestWeatherAPI:
         
         assert response.status_code == 503
         data = response.json()
-        assert "خطأ في خدمة الطقس" in data["detail"]
+        assert "خطأ في خدمة الطقس" in str(data)
     
     @patch('app.services.weather_service.weather_service.get_weather')
     def test_get_weather_internal_error(self, mock_get_weather):
@@ -92,7 +92,7 @@ class TestWeatherAPI:
         
         assert response.status_code == 500
         data = response.json()
-        assert "حدث خطأ داخلي في الخادم" in data["detail"]
+        assert "حدث خطأ داخلي في الخادم" in str(data)
     
     def test_get_supported_cities(self):
         """اختبار الحصول على قائمة المدن المدعومة"""

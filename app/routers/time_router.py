@@ -75,11 +75,12 @@ async def compare_times(
             status_code=400,
             detail={
                 "error": "City not found",
-                "message": str(e),
-                "supported_cities": [
-                    "Cairo", "القاهرة", "Riyadh", "الرياض", 
-                    "Dubai", "دبي", "London", "لندن",
-                    "Paris", "باريس", "New York", "نيويورك"
+                "message": f"لم يتم العثور على المدينة '{str(e)}'. جرب اسم مدينة مختلف أو تأكد من الإملاء.",
+                "note": "يمكنك استخدام أي مدينة في العالم! جرب: طوكيو، برلين، مكة، إسطنبول، نيودلهي، إلخ...",
+                "examples": [
+                    "Cairo", "القاهرة", "Tokyo", "طوكيو", 
+                    "Berlin", "برلين", "Istanbul", "إسطنبول",
+                    "New Delhi", "نيودلهي", "Mecca", "مكة"
                 ]
             }
         )

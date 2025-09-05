@@ -1,6 +1,8 @@
 from datetime import datetime
 import pytz
 from typing import Dict, Tuple
+from geopy.geocoders import Nominatim
+from timezonefinder import TimezoneFinder
 from ..utils.exceptions import CityNotFoundException, TimezoneNotFoundException
 from ..models.time_models import TimeInfo, TimeComparisonResponse
 
@@ -9,7 +11,11 @@ class TimeService:
     """خدمة الوقت والمناطق الزمنية"""
     
     def __init__(self):
-        # قاموس المدن والمناطق الزمنية الخاصة بها
+        # إعداد أدوات البحث الجغرافي
+        self.geolocator = Nominatim(user_agent="fastapi-time-weather")
+        self.tf = TimezoneFinder()
+        
+        # قاموس المدن الشائعة للبحث السريع (اختياري)
         self.city_timezones = {
             # مدن عربية
             "cairo": "Africa/Cairo",
@@ -43,13 +49,28 @@ class TimeService:
         }
     
     def get_city_timezone(self, city_name: str) -> str:
-        """الحصول على المنطقة الزمنية للمدينة"""
+        """الحصول على المنطقة الزمنية للمدينة - يدعم أي مدينة في العالم"""
         city_lower = city_name.lower().strip()
         
-        if city_lower not in self.city_timezones:
-            raise CityNotFoundException(city_name)
+        # أولاً: جرب البحث في القاموس السريع للمدن الشائعة
+        if city_lower in self.city_timezones:
+            return self.city_timezones[city_lower]
+        
+        # ثانياً: ابحث عن المدينة جغرافياً
+        try:
+            location = self.geolocator.geocode(city_name, timeout=10)
+            if location is None:
+                raise CityNotFoundException(city_name)
             
-        return self.city_timezones[city_lower]
+            # احصل على المنطقة الزمنية من الإحداثيات
+            timezone_str = self.tf.timezone_at(lat=location.latitude, lng=location.longitude)
+            if timezone_str is None:
+                raise CityNotFoundException(city_name)
+                
+            return timezone_str
+            
+        except Exception as e:
+            raise CityNotFoundException(city_name)
     
     def get_current_time_in_city(self, city_name: str) -> TimeInfo:
         """الحصول على الوقت الحالي في مدينة معينة"""
