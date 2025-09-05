@@ -257,4 +257,4 @@ WEATHER_API_KEY=your_api_key_here
 
 إذا واجهت أي مشاكل أو لديك أسئلة، يرجى فتح [issue](../../issues) في المستودع.
 ولاتتردد في طرح الاسئلة على قناتي على اليوتيوب
-(Tiger4Code)[http://youtube.com/@tiger4code]
+[My YouTube Channel @Tiger4code](http://youtube.com/@tiger4code)
