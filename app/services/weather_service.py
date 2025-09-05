@@ -12,7 +12,7 @@ class WeatherService:
     def __init__(self, api_key: str = None, base_url: str = None):
         self.api_key = api_key or settings.weather_api_key
         self.base_url = base_url or settings.weather_api_url
-        self.timeout = 10.0  # مهلة زمنية للطلبات
+        self.timeout = 5.0  # مهلة زمنية محسنة للطلبات (5 ثوان)
         
         # ترجمة أوصاف الطقس من الإنجليزية للعربية
         self.weather_translations = {

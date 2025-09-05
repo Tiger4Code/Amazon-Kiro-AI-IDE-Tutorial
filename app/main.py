@@ -5,6 +5,7 @@ import logging
 import time
 from .routers import time_router, weather_router
 from .utils.exceptions import CityNotFoundException, WeatherServiceException, TimezoneNotFoundException
+from .utils.performance import performance_metrics
 
 # Configure logging
 logging.basicConfig(
@@ -42,6 +43,10 @@ async def log_requests(request: Request, call_next):
     
     # حساب وقت المعالجة
     process_time = time.time() - start_time
+    
+    # تسجيل المقاييس
+    is_error = response.status_code >= 400
+    performance_metrics.record_request(process_time, is_error)
     
     # تسجيل الاستجابة
     logger.info(f"📤 {request.method} {request.url.path} - Status: {response.status_code} - Time: {process_time:.3f}s")
@@ -156,6 +161,16 @@ async def health_check():
             "time_service": "operational",
             "weather_service": "operational"
         }
+    }
+
+@app.get("/metrics")
+async def get_performance_metrics():
+    """الحصول على مقاييس الأداء"""
+    logger.info("📊 Performance metrics accessed")
+    return {
+        "performance": performance_metrics.get_metrics_summary(),
+        "timestamp": time.time(),
+        "status": "monitoring_active"
     }
 
 if __name__ == "__main__":

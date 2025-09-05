@@ -253,10 +253,8 @@ WEATHER_API_KEY=your_api_key_here
 4. Push للفرع (`git push origin feature/AmazingFeature`)
 5. فتح Pull Request
 
-## الترخيص
-
-هذا المشروع مرخص تحت رخصة MIT - انظر ملف [LICENSE](LICENSE) للتفاصيل.
-
 ## الدعم
 
 إذا واجهت أي مشاكل أو لديك أسئلة، يرجى فتح [issue](../../issues) في المستودع.
+ولاتتردد في طرح الاسئلة على قناتي على اليوتيوب
+(Tiger4Code)[http://youtube.com/@tiger4code]
